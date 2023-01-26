@@ -3,7 +3,8 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     user_email: str 
     csv_file_path: str
-    #https://drive.google.com/file/d/14JcOSJAWqKOUNyadVZDPm7FplA7XYhrU/view?usp=sharing
+    google_application_credentials: str
+    google_cloud_bucket_name: str = 'test'
 
     class Config:
         env_file = '.env'
