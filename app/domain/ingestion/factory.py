@@ -1,15 +1,20 @@
-from app.models.ingestion import IngestionRequest
-from app.domain.ingestion.use_cases import CreateIngestion
-from app.config import settings
+from app.models.ingestion import PipelineBase
+from app.domain.ingestion import AbstractPipeline
+from app.domain.ingestion.use_cases import CreateIngestion, CreateIngestionGrouped, GetWeeklyAverageOfTrips
+from app.config import logger
 
-class IngestionFactory:
+class PipelineFactory:
+
+    INGESTIONS_MAPPING = {
+        'PipelineRequest': CreateIngestion,
+        'PipelineGroupRequest': CreateIngestionGrouped, 
+        'PipelineWeeklyAverageRequest': GetWeeklyAverageOfTrips
+    }
 
     @staticmethod
-    def from_request(request: IngestionRequest):
+    def from_request(request: PipelineBase) -> AbstractPipeline:
 
-        user_email = request.user_email or settings.user_email
-        file_path = settings.csv_file_path
+        params = request.dict()
+        ingestion = PipelineFactory.INGESTIONS_MAPPING.get(request.__repr_name__())
 
-        ingestion = CreateIngestion(user_email, file_path)
-
-        return ingestion
+        return ingestion(**params)

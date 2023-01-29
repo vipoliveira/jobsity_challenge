@@ -3,6 +3,8 @@ from pydantic import BaseSettings, BaseModel
 class Settings(BaseSettings):
     user_email: str 
     csv_file_path: str
+    sendgrid_api_key: str
+    sendgrid_email_sender: str
     google_application_credentials: str
     google_cloud_bucket_name: str = 'test'
 
